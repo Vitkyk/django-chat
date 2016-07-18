@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'lobby.apps.LobbyConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -55,7 +56,11 @@ ROOT_URLCONF = 'DjangoChat.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join("templates"),
+            os.path.join("templates/lobby"),
+            os.path.join("static/lobby/img")
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

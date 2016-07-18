@@ -1,0 +1,10 @@
+{% extends "lobby/base.html" %}
+{% block login %}
+<div class="large-offset-3 large-6 columns">
+    <form method="post" action="/register/">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input class="button" type="submit" value="Регистрация">
+    </form>
+</div>
+{% endblock %}

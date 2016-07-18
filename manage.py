@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# import django.core.management
 import os
 import sys
 

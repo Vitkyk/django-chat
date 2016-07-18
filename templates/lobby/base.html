@@ -1,0 +1,42 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head lang="ru">
+    <meta charset="UTF-8">
+    <title>DjangoChat</title>
+</head>
+<body>
+
+    <span>
+        <a href="/">Home</a>
+
+        {% if username %}
+        {% endif %}
+
+        {% if user.is_authenticated %}
+            <a href="/logout/">Logout ({{ username }})</a>
+        {% else %}
+            {% block tol-bar-login %}
+                <a href="/login/">Login</a>
+                <a href="/register/"> Register</a>
+            {% endblock %}
+        {% endif %}
+    </span>
+
+
+    <div id="main">
+        <div>
+            {% block errors %}{% endblock %}
+            {% block headline %}{% endblock %}
+            {% block profile %} {% endblock %}
+            {% block users %}{% endblock %}
+            {% block editor %}{% endblock %}
+            {% block login %}{% endblock %}
+            {% block post %}{% endblock %}
+            {% block content %}{% endblock %}
+        </div>
+
+    </div>
+</body>
+</html>
+
