@@ -15,7 +15,8 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
+API_KEY = "d9-Zk1PEGr8ReDS8E1NmKuB0inJOI-lH"
+SEND_MESSAGE_API_URL = 'http://127.0.0.1:8000/messages/send_message_api'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
@@ -51,6 +52,8 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+SESSION_ENGINE = 'redis_sessions.session'   # move to local_settings
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 ROOT_URLCONF = 'DjangoChat.urls'
 
 TEMPLATES = [
@@ -124,3 +127,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
