@@ -1,6 +1,5 @@
 # coding: utf8
 import json
-import redis
 
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
@@ -12,6 +11,18 @@ from django.core.context_processors import csrf
 from django.contrib.auth.forms import UserCreationForm
 
 from lobby.models import Message
+from rest_framework import viewsets
+from serializers import UserSerializer, MessageSerializer
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
+
+
+class MessageViewSet(viewsets.ModelViewSet):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
 
 
 # utils
