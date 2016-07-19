@@ -15,7 +15,7 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-API_KEY = "d9-Zk1PEGr8ReDS8E1NmKuB0inJOI-lH"
+API_KEY = os.getenv("API_KEY")
 SEND_MESSAGE_API_URL = 'http://127.0.0.1:8000/messages/send_message_api'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
