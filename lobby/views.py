@@ -88,6 +88,13 @@ def register(request):
     return render_to_response('lobby/register.html', args)
 
 
+def room(request):
+    args = {}
+
+    args["messages"] = Message.objects.all()
+    return render_to_response('lobby/room.html', args)
+
+
 @csrf_exempt
 def send_message_api_view(request):
     if not request.method == "POST":

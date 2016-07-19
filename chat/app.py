@@ -45,6 +45,8 @@ class WebSocketHandler(BaseHandler, tornado.websocket.WebSocketHandler):
     connections = set()
 
     def open(self):
+
+        # self.connections.write_message()
         WebSocketHandler.connections.add(self)
 
     def on_close(self):
