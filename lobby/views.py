@@ -13,6 +13,7 @@ from django.contrib.auth.forms import UserCreationForm
 from lobby.models import Message
 from rest_framework import viewsets
 from serializers import UserSerializer, MessageSerializer
+from itertools import chain
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -90,8 +91,16 @@ def register(request):
 
 def room(request):
     args = {}
-
     args["messages"] = Message.objects.all()
+    return render_to_response('lobby/room.html', args)
+
+
+def privateroom(request, sender_id, receiver_id):
+    args = {}
+    send = Message.objects.filter(sender=sender_id, receiver=receiver_id)
+    received = Message.objects.filter(sender=receiver_id, receiver=sender_id)
+    args["messages"] = sorted(chain(send, received), key=lambda instance: instance.date)
+
     return render_to_response('lobby/room.html', args)
 
 
