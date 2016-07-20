@@ -4,6 +4,7 @@ ws.onmessage = function (evt) {
     var data = JSON.parse(evt.data)
     var name = data['name']
     var msg = data['msg']
+    console.log(evt);
     $('.table > tbody:last').append(
         '<tr><td class="col-md-4"><b>' + name +
         ':</b></td><td class="col-md-8">' + msg +'</td></tr>'
