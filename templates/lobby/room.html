@@ -1,7 +1,49 @@
 {% extends "lobby/base.html" %}
 
 {% block content %}
-    {% for message in messages %}
-     <p>Sender: {{ message.sender }}. Receiver: {{ message.receiver }}. Text: {{ message.text }}</p>
-    {% endfor %}
+
+    <div class="container">
+        <div class="starter-template">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <td><b>Sender:</b></td>
+                    <td><b>Receiver:</b></td>
+                  <td><b>Messages:</b></td>
+                </tr>
+              </thead>
+              <tbody>
+              {% for message in messages %}
+                  <tr>
+                      <td class="col-md-4">
+                          <b> {{ message.sender }} -></b>
+                      </td>
+                      <td class="col-md-4">
+                          <b> {{ message.receiver }}:</b>
+                      </td>
+                      <td class="col-md-8">
+                          {{ message.text }}
+                      </td>
+                  </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+          <p>
+            <form id="msg_form" style="float:center">
+              <div class="form-group">
+                <div class="col-sm-11">
+                  <input type="text" class="form-control" name="msg" placeholder="Your message...">
+                </div>
+                <button type="submit" class="btn btn-default">Send</button>
+              </div>
+            </form>
+          </p>
+      </div>
+    </footer>
+
 {% endblock %}

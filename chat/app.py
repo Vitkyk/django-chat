@@ -4,6 +4,7 @@ import os.path
 import tornado.ioloop
 import tornado.web
 import tornado.websocket
+import urllib
 # import tornado.auth
 # import tornado.gen
 
@@ -13,7 +14,6 @@ class Application(tornado.web.Application):
         handlers = [
             (r'/', ChatHandler),
             (r'/ws', WebSocketHandler),
-            (r'/ws2', SocketHandler),
         ]
         settings = dict(
             # cookie_secret="your_cookie_secret",
@@ -53,27 +53,17 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         WebSocketHandler.connections.remove(self)
 
     def on_message(self, msg):
+        http_client = tornado.httpclient.AsyncHTTPClient()
+        post_data = {'sender': 1, 'receiver': 1, 'text': msg} #A dictionary of your post data
+        body = urllib.urlencode(post_data) #Make it into a post request
+        http_client.fetch("http://localhost:8000/rest/messages/", method='POST', auth_username='admin', auth_password='v12341234', headers=None, body=body) #Send it off!
+        # url = "http://localhost:8000/rest/messages/"
+        # tornado.requests.post(url, data={'sender':1, 'receiver':2, 'text':'curlyk'},auth=('anmekin','nicetry'))
         self.send_messages(msg)
 
     def send_messages(self, msg):
         for conn in self.connections:
             conn.write_message({'name': self.current_user, 'msg': msg})
-
-
-cl = []
-
-
-class SocketHandler(tornado.websocket.WebSocketHandler):
-    # def check_origin(self, origin):
-    #     return True
-
-    def open(self):
-        if self not in cl:
-            cl.append(self)
-
-    def on_close(self):
-        if self in cl:
-            cl.remove(self)
 
 
 def main():
