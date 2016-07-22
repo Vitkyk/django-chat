@@ -12,6 +12,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class MessageSerializer(serializers.HyperlinkedModelSerializer):
     sender = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     receiver = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
     class Meta:
         model = Message
         fields = ('id', 'sender', 'receiver', 'text')

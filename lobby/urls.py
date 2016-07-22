@@ -7,5 +7,5 @@ urlpatterns = [
     url(r'^logout/$', logout),
     url(r'^register/$', register),
     url(r'^room/$', room),
-    url(r'^room/(?P<sender_id>\d+)&(?P<receiver_id>\d+)/$', privateroom),
+    url(r'^room/(?P<receiver_id>\d+)/$', privateroom),
 ]

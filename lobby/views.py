@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib import auth
 from django.core.context_processors import csrf
 from django.contrib.auth.forms import UserCreationForm
-
+from django.db.models import Q
 from lobby.models import Message
 from rest_framework import viewsets
 from serializers import UserSerializer, MessageSerializer
@@ -91,17 +91,23 @@ def register(request):
 
 def room(request):
     args = {}
+    args["users"] = User.objects.all()
+    args["username"] = auth.get_user(request).username
     args["messages"] = Message.objects.all()
     return render_to_response('lobby/room.html', args)
 
 
-def privateroom(request, sender_id, receiver_id):
+def privateroom(request, receiver_id):
     args = {}
-    send = Message.objects.filter(sender=sender_id, receiver=receiver_id)
-    received = Message.objects.filter(sender=receiver_id, receiver=sender_id)
-    args["messages"] = sorted(chain(send, received), key=lambda instance: instance.date)
-
-    return render_to_response('lobby/room.html', args)
+    args["users"] = User.objects.all()
+    args["username"] = auth.get_user(request).username
+    sender_id = auth.get_user(request).id
+    # send = Message.objects.filter(sender=sender_id, receiver=receiver_id)
+    # received = Message.objects.filter(sender=receiver_id, receiver=sender_id)
+    # args["messages"] = sorted(chain(send, received), key=lambda instance: instance.date)
+    args["messages"] = Message.objects.filter(Q(sender=sender_id, receiver=receiver_id) | Q(sender=sender_id, receiver=receiver_id))
+    # return render_to_response('lobby/room.html', args)
+    return render(request, 'lobby/room.html', dictionary=args)
 
 
 @csrf_exempt

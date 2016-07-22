@@ -10,9 +10,6 @@
     <span>
         <a href="/">Home</a>
 
-        {% if username %}
-        {% endif %}
-
         {% if user.is_authenticated %}
             <a href="/logout/">Logout ({{ username }})</a>
         {% else %}
@@ -28,8 +25,19 @@
         <div>
             {% block errors %}{% endblock %}
             {% block headline %}{% endblock %}
-            {% block profile %} {% endblock %}
-            {% block users %}{% endblock %}
+            {% block users %}
+                <ul>
+                {% for u in users %}
+                 <li>
+                    {% if user.is_authenticated %}
+                        <a href="/room/{{ u.id }}">{{ u.username }}</a>
+                    {% else %}
+                        {{ u.username }}
+                    {% endif %}
+                </li>
+                {% endfor %}
+                </ul>
+            {% endblock %}
             {% block editor %}{% endblock %}
             {% block login %}{% endblock %}
             {% block post %}{% endblock %}
