@@ -43,6 +43,7 @@ def send_message(sender_id, receiver_id, message_text):
 def home(request):
     args = {}
     args.update(csrf(request))
+    args["sender_id"] = auth.get_user(request).id
     args["users"] = User.objects.all()
     args["username"] = auth.get_user(request).username
     return render(request, 'lobby/home.html', dictionary=args)
@@ -105,7 +106,9 @@ def privateroom(request, receiver_id):
     # send = Message.objects.filter(sender=sender_id, receiver=receiver_id)
     # received = Message.objects.filter(sender=receiver_id, receiver=sender_id)
     # args["messages"] = sorted(chain(send, received), key=lambda instance: instance.date)
-    args["messages"] = Message.objects.filter(Q(sender=sender_id, receiver=receiver_id) | Q(sender=sender_id, receiver=receiver_id))
+    args["messages"] = sorted(Message.objects.filter(Q(sender=sender_id, receiver=receiver_id) | Q(sender=receiver_id, receiver=sender_id)), key=lambda instance: instance.date)
+    args["sender_id"] = sender_id
+    args["receiver_id"] = receiver_id
     # return render_to_response('lobby/room.html', args)
     return render(request, 'lobby/room.html', dictionary=args)
 
