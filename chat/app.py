@@ -51,9 +51,11 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             if value['socket'] == self:
                 my_connections.pop(key)
                 break
-        # if self in my_connections:
-        #     my_connections.popitem()
-        # WebSocketHandler.connections.remove(self)
+        online = list()
+        for key, value in my_connections.iteritems():
+            online.append({'id': key, 'username': value['username']})
+        for key, value in my_connections.iteritems():
+            my_connections[key]['socket'].write_message({'online': online, 'name': 'system', 'text': 'disconnect'})
 
     def on_message(self, data):
         data = json.loads(data)
