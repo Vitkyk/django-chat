@@ -15,16 +15,16 @@ class Application(tornado.web.Application):
         handlers = [
             # (r'/', ChatHandler),
             # (r'/ws', WebSocketHandler),
-            (r'/ws/(?P<sender_id>\d+)/', WebSocketHandler),
+            (r'/ws/(?P<sender_id>\d+)&(?P<username>\w+)/', WebSocketHandler),
         ]
-        settings = dict(
-            # cookie_secret="your_cookie_secret",
-            template_path=os.path.join(os.path.dirname(__file__), 'templates'),
-            static_path=os.path.join(os.path.dirname(__file__), 'static'),
-            # xsrf_cookies=True,
-            # debug=True,
-        )
-        tornado.web.Application.__init__(self, handlers, **settings)
+        # settings = dict(
+        #     # cookie_secret="your_cookie_secret",
+        #     template_path=os.path.join(os.path.dirname(__file__), 'templates'),
+        #     static_path=os.path.join(os.path.dirname(__file__), 'static'),
+        #     # xsrf_cookies=True,
+        #     # debug=True,
+        # )
+        tornado.web.Application.__init__(self, handlers)
 
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
@@ -34,14 +34,21 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def check_origin(self, origin):
         return True
 
-    def open(self, sender_id=0):
-        my_connections[sender_id] = self
+    def open(self, sender_id=0, username="system"):
+        my_connections[sender_id] = {
+            'socket': self,
+            'username': username
+        }
         # WebSocketHandler.connections.add(self)
-        my_connections[sender_id].write_message({'name': 'system', 'text': 'connection complete'})
+        online = list()
+        for key, value in my_connections.iteritems():
+            online.append({'id': key, 'username': value['username']})
+        for key, value in my_connections.iteritems():
+            my_connections[key]['socket'].write_message({'online': online, 'name': 'system', 'text': 'connection complete'})
 
     def on_close(self):
         for key, value in my_connections.iteritems():
-            if value == self:
+            if value['socket'] == self:
                 my_connections.pop(key)
                 break
         # if self in my_connections:
@@ -74,7 +81,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         for key, value in my_connections.iteritems():
             # print(key, value)
             if (data["sender_id"] == int(key)) or (data["receiver_id"] == int(key)):
-                my_connections[key].write_message(data)
+                my_connections[key]['socket'].write_message(data)
 
         # for conn in my_connections:
         #     conn.write_message({'name': self.current_user, 'msg': json.dumps(msg)})

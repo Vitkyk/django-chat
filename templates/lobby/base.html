@@ -4,7 +4,8 @@
 <head lang="ru">
     <meta charset="UTF-8">
     <title>DjangoChat</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{% static "css/chat.css" %}">
 </head>
 <body>
@@ -24,35 +25,29 @@
 
 
     <div id="main">
+        {% if user.is_authenticated %}
+
+        {% endif %}
+
+
+
         <div>
             {% block errors %}{% endblock %}
             {% block headline %}{% endblock %}
             {% block users %}
-                <ul>
-                {% for u in users %}
-                 <li>
-                    {% if user.is_authenticated %}
-                        <a href="/room/{{ u.id }}">{{ u.username }}</a>
-                    {% else %}
-                        {{ u.username }}
-                    {% endif %}
-                </li>
-                {% endfor %}
-                </ul>
+                <div id="online"></div>
             {% endblock %}
-            {% block editor %}{% endblock %}
             {% block login %}{% endblock %}
-            {% block post %}{% endblock %}
             {% block content %}{% endblock %}
         </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    {% if user.is_authenticated %}
-        <script src="{% static "js/chat.js" %}" type="text/javascript"></script>
-        <script>
-            init_websocket({{ sender_id }}, {{ receiver_id }});
-        </script>
-    {% endif %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        {% if user.is_authenticated %}
+            <script src="{% static "js/chat.js" %}" type="text/javascript"></script>
+            <script>
+                init_websocket({{ sender_id }}, {{ receiver_id }}, '{{ username }}');
+            </script>
+        {% endif %}
     </div>
 </body>
 </html>
