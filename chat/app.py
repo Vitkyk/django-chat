@@ -98,7 +98,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 def main():
     # port = int(os.environ.get("PORT", 8888))
     app = Application()
-    app.listen(8888)
+    app.listen(8888, address='0.0.0.0')
     tornado.ioloop.IOLoop.instance().start()
 
 

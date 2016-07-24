@@ -12,12 +12,17 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-API_KEY = os.getenv("API_KEY")
-SEND_MESSAGE_API_URL = 'http://127.0.0.1:8000/messages/send_message_api'
+
+TORNADO_URL = os.getenv("TORNADO_URL")
+DJANGO_URL = os.getenv("DJANGO_URL")
+PUBLIC_IP = os.getenv("PUBLIC_IP")
+# SEND_MESSAGE_API_URL = 'http://127.0.0.1:8000/messages/send_message_api'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# SECRET_KEY = os.getenv("SECRET_KEY")
+# print os.getenv("SECRET_KEY")
 SECRET_KEY = 'ra0tb@9cpw+6w$(i+gw!x_m1o8g3$4qo)ktp8!&+68-zq5p=v8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -41,7 +46,10 @@ INSTALLED_APPS = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'DEFAULT_PERMISSION_CLASSES':
+        ('rest_framework.permissions.IsAuthenticated',),
+    'DEFAULT_AUTHENTICATION_CLASSES':
+        ('rest_framework.authentication.TokenAuthentication', ),
     'PAGE_SIZE': 10
 }
 
