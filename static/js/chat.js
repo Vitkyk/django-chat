@@ -28,8 +28,8 @@ function init_websocket(sender_id, receiver_id, username) {
             var name = data['name'];
             var text = data['text'];
             $('.table > tbody:last').append(
-                '<tr><td class="col-md-4"><b>' + data["sender_id"] +
-                ':</b></td><td class="col-md-4"><b>' + data["receiver_id"] +
+                '<tr><td class="col-md-4"><b>' + data["sender"] +
+                ' -></b></td><td class="col-md-4"><b>' + data["receiver"] +
                 ':</b></td><td class="col-md-8">' + text +'</td></tr>'
             );
         }

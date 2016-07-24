@@ -81,6 +81,12 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
     def send_messages(self, data):
         for key, value in my_connections.iteritems():
+            if data["sender_id"] == int(key):
+                data["sender"] = value["username"]
+            if data["receiver_id"] == int(key):
+                data["receiver"] = value["username"]
+
+        for key, value in my_connections.iteritems():
             # print(key, value)
             if (data["sender_id"] == int(key)) or (data["receiver_id"] == int(key)):
                 my_connections[key]['socket'].write_message(data)
