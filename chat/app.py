@@ -15,7 +15,7 @@ class Application(tornado.web.Application):
         handlers = [
             # (r'/', ChatHandler),
             # (r'/ws', WebSocketHandler),
-            (r'/ws/(?P<sender_id>\d+)&(?P<username>\w+)/', WebSocketHandler),
+            (r'/ws/(?P<sender_id>\d+)&(?P<username>\w+)&(?P<token>\w+)/', WebSocketHandler),
         ]
         # settings = dict(
         #     # cookie_secret="your_cookie_secret",
@@ -34,10 +34,11 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def check_origin(self, origin):
         return True
 
-    def open(self, sender_id=0, username="system"):
+    def open(self, sender_id=0, username="system", token=None):
         my_connections[sender_id] = {
             'socket': self,
-            'username': username
+            'username': username,
+            'token': token
         }
         # WebSocketHandler.connections.add(self)
         online = list()
@@ -68,9 +69,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         self.http_client.fetch(
             "http://localhost:8000/rest/messages/",
             method='POST',
-            auth_username='admin',
-            auth_password='v12341234',
-            headers=None,
+            headers={'Authorization': 'Token '+my_connections[str(data['sender_id'])]['token']},
             body=body
         )
         # url = "http://localhost:8000/rest/messages/"
