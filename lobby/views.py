@@ -4,7 +4,7 @@ from django.contrib import auth
 from django.core.context_processors import csrf
 from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q
-
+from django.conf import settings
 from django.contrib.auth.models import User
 from lobby.models import Message
 from api import MessageViewSet, UserViewSet
@@ -13,6 +13,7 @@ from api import MessageViewSet, UserViewSet
 def home(request):
     args = {}
     args.update(csrf(request))
+    args["public_ip"] = settings.PUBLIC_IP
     args["sender_id"] = auth.get_user(request).id
     args["users"] = User.objects.all()
     args["username"] = auth.get_user(request).username
@@ -32,7 +33,7 @@ def login(request):
             auth.login(request, user)
             return redirect('/')
         else:
-            args['login_error'] = "Пользователь не найден"
+            args['login_error'] = "User not found!!!"
             return render_to_response('lobby/login.html', args)
     else:
         return render_to_response('lobby/login.html', args)
@@ -52,32 +53,22 @@ def register(request):
         newuser_form = UserCreationForm(request.POST)
         if newuser_form.is_valid():
             newuser_form.save()
-            # auth.authenticate(username=request.user, password=newuser_form.password1)
-            # args["username"] = auth.get_user(request).username
             return redirect('/login/')
         else:
             args['form'] = newuser_form
     return render_to_response('lobby/register.html', args)
 
 
-def room(request):
+def room(request, receiver_id):
     args = {}
-    args["users"] = User.objects.all()
-    args["username"] = auth.get_user(request).username
-    args["messages"] = Message.objects.all()
-    return render_to_response('lobby/room.html', args)
-
-
-def privateroom(request, receiver_id):
-    args = {}
+    args["public_ip"] = settings.PUBLIC_IP
     args["users"] = User.objects.all()
     args["username"] = auth.get_user(request).username
     sender_id = auth.get_user(request).id
-    # send = Message.objects.filter(sender=sender_id, receiver=receiver_id)
-    # received = Message.objects.filter(sender=receiver_id, receiver=sender_id)
-    # args["messages"] = sorted(chain(send, received), key=lambda instance: instance.date)
-    args["messages"] = sorted(Message.objects.filter(Q(sender=sender_id, receiver=receiver_id) | Q(sender=receiver_id, receiver=sender_id)), key=lambda instance: instance.date)
+    if request.user.auth_token == User.objects.get(id=sender_id).auth_token:
+        args["messages"] = sorted(Message.objects.filter(Q(sender=sender_id, receiver=receiver_id) | Q(sender=receiver_id, receiver=sender_id)), key=lambda instance: instance.date)
+    else:
+        args["error"] = "Wrong token!"
     args["sender_id"] = sender_id
     args["receiver_id"] = receiver_id
-    # return render_to_response('lobby/room.html', args)
     return render(request, 'lobby/room.html', dictionary=args)
