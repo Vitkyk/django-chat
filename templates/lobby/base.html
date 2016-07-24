@@ -27,6 +27,12 @@
       </div>
     </nav>
 
+    <div id="right-menu">
+        {% block users %}
+            <div id="online"></div>
+        {% endblock %}
+    </div>
+
 
     <div id="main">
         <div>
@@ -44,12 +50,6 @@
                 init_websocket('{{ public_ip }}', {{ sender_id }}, '{{ username }}', '{{ user.auth_token }}');
             </script>
         {% endif %}
-    </div>
-
-    <div id="right-menu">
-        {% block users %}
-            <div id="online"></div>
-        {% endblock %}
     </div>
 
 </body>

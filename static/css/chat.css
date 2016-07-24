@@ -9,12 +9,12 @@
 -------------------------------------------------- */
 html {
   position: relative;
-  min-height: 100%;
+  min-height: 50%;
 }
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-  padding-top: 50px;
+    margin-bottom: 60px;
+    padding-top: 50px;
+
 }
 .footer {
   position: fixed;
@@ -23,12 +23,18 @@ body {
   height: 60px;
   background-color: #f5f5f5;
 }
+#right-menu {
+    position: fixed;
+    top: 30px;
+    padding-top: 100px;
+    right: 0;
+    height: 100%;
+    width: 15%;
+    background-color: #f5f5f5;
+}
 #main {
 	position: absolute;
 	width: 80%;
+    left:0;
 }
-#right-menu {
-	position: absolute;
-	width: 20%;
-	left: 80%;
-}
+
