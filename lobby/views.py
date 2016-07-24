@@ -15,7 +15,7 @@ def home(request):
     args.update(csrf(request))
     args["public_ip"] = settings.PUBLIC_IP
     args["sender_id"] = auth.get_user(request).id
-    args["users"] = User.objects.all()
+    # args["users"] = User.objects.all()
     args["username"] = auth.get_user(request).username
     return render(request, 'lobby/home.html', dictionary=args)
 
@@ -23,7 +23,7 @@ def home(request):
 def login(request):
     args = {}
     args.update(csrf(request))
-    args["users"] = User.objects.all()
+    # args["users"] = User.objects.all()
     args["username"] = auth.get_user(request).username
     if request.POST:
         username = request.POST.get('username', '')
@@ -48,7 +48,7 @@ def register(request):
     args = {}
     args.update(csrf(request))
     args['form'] = UserCreationForm()
-    args["users"] = User.objects.all()
+    # args["users"] = User.objects.all()
     if request.POST:
         newuser_form = UserCreationForm(request.POST)
         if newuser_form.is_valid():
@@ -62,7 +62,7 @@ def register(request):
 def room(request, receiver_id):
     args = {}
     args["public_ip"] = settings.PUBLIC_IP
-    args["users"] = User.objects.all()
+    # args["users"] = User.objects.all()
     args["username"] = auth.get_user(request).username
     sender_id = auth.get_user(request).id
     if request.user.auth_token == User.objects.get(id=sender_id).auth_token:
@@ -71,4 +71,5 @@ def room(request, receiver_id):
         args["error"] = "Wrong token!"
     args["sender_id"] = sender_id
     args["receiver_id"] = receiver_id
+    args["receiver"] = User.objects.get(id=receiver_id)
     return render(request, 'lobby/room.html', dictionary=args)

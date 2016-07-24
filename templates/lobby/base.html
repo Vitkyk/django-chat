@@ -22,6 +22,9 @@
                         <li><a href="/register/"> Register</a></li>
                     {% endblock %}
               {% endif %}
+                {% if receiver %}
+                   <li><a>Talk with <strong><i>{{ receiver }}</i></strong></a></li>
+                {% endif %}
           </ul>
         </div>
       </div>
