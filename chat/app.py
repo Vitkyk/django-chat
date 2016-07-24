@@ -58,13 +58,18 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             'receiver': data['receiver_id'],
             'text': data['text']
         }
-        body = urllib.urlencode(post_data) #Make it into a post request
+        # curl -X POST -H "Content-Type: application/json" -H 'Authorization: Token 9bbf74d9b6372b55adda17670109ec76f3fcd5a9' -d '{"sender":"7", "receiver":"7", "text":"bwahaha"}' 127.0.0.1:8000/rest/messages/
+
+        # body = urllib.urlencode(post_data) #Make it into a post request
         self.http_client.fetch(
             'http://%s:%s/rest/messages/' % (str(DJANGO_HOST), str(DJANGO_PORT)),
             # "http://0.0.0.0:"+str(DJANGO_PORT)+"/rest/messages/",
             method='POST',
-            headers={'Authorization': 'Token '+my_connections[str(data['sender_id'])]['token']},
-            body=body
+            headers={
+                'Authorization': 'Token '+my_connections[str(data['sender_id'])]['token'],
+                'Content-Type': 'application/json',
+                },
+            body=json.dumps(post_data)
         )
 
         self.send_messages(data)
