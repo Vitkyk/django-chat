@@ -20,7 +20,15 @@ body {
   position: fixed;
   bottom: 0;
   width: 100%;
-  /* Set the fixed height of the footer here */
   height: 60px;
   background-color: #f5f5f5;
+}
+#main {
+	position: absolute;
+	width: 80%;
+}
+#right-menu {
+	position: absolute;
+	width: 20%;
+	left: 80%;
 }

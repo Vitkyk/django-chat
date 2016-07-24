@@ -4,15 +4,15 @@
 <head lang="ru">
     <meta charset="UTF-8">
     <title>DjangoChat</title>
-
+    <meta charset="UTF-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{% static "css/chat.css" %}">
 </head>
 <body>
 
+
     <span>
         <a href="/">Home</a>
-
         {% if user.is_authenticated %}
             <a href="/logout/">Logout ({{ username }})</a>
         {% else %}
@@ -24,19 +24,11 @@
     </span>
 
 
+
     <div id="main">
-        {% if user.is_authenticated %}
-
-        {% endif %}
-
-
-
         <div>
             {% block errors %}{% endblock %}
             {% block headline %}{% endblock %}
-            {% block users %}
-                <div id="online"></div>
-            {% endblock %}
             {% block login %}{% endblock %}
             {% block content %}{% endblock %}
         </div>
@@ -50,6 +42,13 @@
             </script>
         {% endif %}
     </div>
+
+    <div id="right-menu">
+        {% block users %}
+            <div id="online"></div>
+        {% endblock %}
+    </div>
+
 </body>
 </html>
 
