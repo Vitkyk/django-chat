@@ -45,7 +45,8 @@
         {% if user.is_authenticated %}
             <script src="{% static "js/chat.js" %}" type="text/javascript"></script>
             <script>
-                init_websocket({{ sender_id }}, {{ receiver_id }}, '{{ username }}');
+                init_recv({{ receiver_id }});
+                init_websocket({{ sender_id }}, '{{ username }}');
             </script>
         {% endif %}
     </div>

@@ -6,10 +6,13 @@ var send_id;
 var recv_id;
 var online;
 
-function init_websocket(sender_id, receiver_id, username) {
+function init_recv(receiver_id) {
+    recv_id = receiver_id;
+}
+
+function init_websocket(sender_id, username) {
     ws = new WebSocket("ws://127.0.0.1:8888/ws/" + sender_id + "&" + username + "/");
     send_id = sender_id;
-    recv_id = receiver_id;
     ws.onmessage = function (evt) {
         var data = JSON.parse(evt.data);
         if (data['online']) {
