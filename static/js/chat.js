@@ -10,8 +10,8 @@ function init_recv(receiver_id) {
     recv_id = receiver_id;
 }
 
-function init_websocket(public_ip, tornado_port, sender_id, username, token) {
-    ws = new WebSocket("ws://" + public_ip + ":" + tornado_port + "/ws/" + sender_id + "&" + username + '&' +token + "/");
+function init_websocket(tornado_host, tornado_port, sender_id, username, token) {
+    ws = new WebSocket("ws://" + tornado_host + ":" + tornado_port + "/ws/" + sender_id + "&" + username + '&' +token + "/");
     send_id = sender_id;
     ws.onmessage = function (evt) {
         var data = JSON.parse(evt.data);

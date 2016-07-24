@@ -16,7 +16,6 @@ DJANGO_PORT = os.getenv("DJANGO_PORT", 8000)
 DJANGO_HOST = os.getenv("DJANGO_HOST", "0.0.0.0")
 TORNADO_PORT = os.getenv("TORNADO_PORT", 8888)
 TORNADO_HOST = os.getenv("TORNADO_HOST", "0.0.0.0")
-PUBLIC_IP = os.getenv("PUBLIC_IP", "0.0.0.0")
 SECRET_KEY = os.getenv("SECRET_KEY", "ra0tb@9cpw+6w$(i+gw!x_m1o8g3$4qo)ktp8!&+68-zq5p=v8")
 
 # SECURITY WARNING: don't run with debug turned on in production!

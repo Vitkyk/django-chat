@@ -50,7 +50,7 @@
             <script src="{% static "js/chat.js" %}" type="text/javascript"></script>
             <script>
                 init_recv({{ receiver_id }});
-                init_websocket('{{ public_ip }}', {{ tornado_port }}, {{ sender_id }}, '{{ username }}', '{{ user.auth_token }}');
+                init_websocket('{{ tornado_host }}', {{ tornado_port }}, {{ sender_id }}, '{{ username }}', '{{ user.auth_token }}');
             </script>
         {% endif %}
     </div>
