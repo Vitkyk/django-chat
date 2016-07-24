@@ -1,35 +1,29 @@
-import os.path
+import os
 import tornado.ioloop
 import tornado.web
 import tornado.websocket
 import tornado.httpclient
 import urllib
 import json
-# import tornado.auth
-# import tornado.gen
+
+DJANGO_PORT = os.getenv("DJANGO_PORT", 8000)
+DJANGO_HOST = os.getenv("DJANGO_HOST", "0.0.0.0")
+TORNADO_PORT = os.getenv("TORNADO_PORT", 8888)
+TORNADO_HOST = os.getenv("TORNADO_HOST", "0.0.0.0")
+
 my_connections = dict()
 
 
 class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
-            # (r'/', ChatHandler),
-            # (r'/ws', WebSocketHandler),
             (r'/ws/(?P<sender_id>\d+)&(?P<username>\w+)&(?P<token>\w+)/', WebSocketHandler),
         ]
-        # settings = dict(
-        #     # cookie_secret="your_cookie_secret",
-        #     template_path=os.path.join(os.path.dirname(__file__), 'templates'),
-        #     static_path=os.path.join(os.path.dirname(__file__), 'static'),
-        #     # xsrf_cookies=True,
-        #     # debug=True,
-        # )
         tornado.web.Application.__init__(self, handlers)
 
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     http_client = tornado.httpclient.AsyncHTTPClient()
-    # connections = set()
 
     def check_origin(self, origin):
         return True
@@ -40,7 +34,6 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             'username': username,
             'token': token
         }
-        # WebSocketHandler.connections.add(self)
         online = list()
         for key, value in my_connections.iteritems():
             online.append({'id': key, 'username': value['username']})
@@ -67,16 +60,14 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         }
         body = urllib.urlencode(post_data) #Make it into a post request
         self.http_client.fetch(
-            "http://localhost:8000/rest/messages/",
+            'http://%s:%s/rest/messages/' % (str(DJANGO_HOST), str(DJANGO_PORT)),
+            # "http://0.0.0.0:"+str(DJANGO_PORT)+"/rest/messages/",
             method='POST',
             headers={'Authorization': 'Token '+my_connections[str(data['sender_id'])]['token']},
             body=body
         )
-        # url = "http://localhost:8000/rest/messages/"
-        # tornado.requests.post(url, data={'sender':1, 'receiver':2, 'text':'curlyk'},auth=('anmekin','nicetry'))
 
         self.send_messages(data)
-        # WebSocketHandler.conn[data['sender_id']].send_message(data['msg'])
 
     def send_messages(self, data):
         for key, value in my_connections.iteritems():
@@ -86,18 +77,13 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                 data["receiver"] = value["username"]
 
         for key, value in my_connections.iteritems():
-            # print(key, value)
             if (data["sender_id"] == int(key)) or (data["receiver_id"] == int(key)):
                 my_connections[key]['socket'].write_message(data)
 
-        # for conn in my_connections:
-        #     conn.write_message({'name': self.current_user, 'msg': json.dumps(msg)})
-
 
 def main():
-    # port = int(os.environ.get("PORT", 8888))
     app = Application()
-    app.listen(8888, address='0.0.0.0')
+    app.listen(TORNADO_PORT, address='0.0.0.0')
     tornado.ioloop.IOLoop.instance().start()
 
 

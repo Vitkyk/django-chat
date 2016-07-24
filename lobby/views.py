@@ -14,6 +14,7 @@ def home(request):
     args = {}
     args.update(csrf(request))
     args["public_ip"] = settings.PUBLIC_IP
+    args["tornado_port"] = settings.TORNADO_PORT
     args["sender_id"] = auth.get_user(request).id
     # args["users"] = User.objects.all()
     args["username"] = auth.get_user(request).username
@@ -62,6 +63,7 @@ def register(request):
 def room(request, receiver_id):
     args = {}
     args["public_ip"] = settings.PUBLIC_IP
+    args["tornado_port"] = settings.TORNADO_PORT
     # args["users"] = User.objects.all()
     args["username"] = auth.get_user(request).username
     sender_id = auth.get_user(request).id
