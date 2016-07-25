@@ -1,10 +1,9 @@
 # coding: utf8
-from serializers import UserSerializer, MessageSerializer
 from rest_framework import viewsets, exceptions
-
-from django.contrib.auth.models import User
-from django.contrib import auth
 from django.db.models import Q
+
+from serializers import UserSerializer, MessageSerializer
+from django.contrib.auth.models import User
 from lobby.models import Message
 
 

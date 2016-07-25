@@ -62,7 +62,6 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# SESSION_ENGINE = 'redis_sessions.session'   # move to local_settings
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 ROOT_URLCONF = 'DjangoChat.urls'
 

@@ -16,7 +16,6 @@ def home(request):
     args["tornado_host"] = settings.TORNADO_HOST
     args["tornado_port"] = settings.TORNADO_PORT
     args["sender_id"] = auth.get_user(request).id
-    # args["users"] = User.objects.all()
     args["username"] = auth.get_user(request).username
     return render(request, 'lobby/home.html', dictionary=args)
 
@@ -24,8 +23,8 @@ def home(request):
 def login(request):
     args = {}
     args.update(csrf(request))
-    # args["users"] = User.objects.all()
     args["username"] = auth.get_user(request).username
+
     if request.POST:
         username = request.POST.get('username', '')
         password = request.POST.get('password', '')
@@ -49,7 +48,7 @@ def register(request):
     args = {}
     args.update(csrf(request))
     args['form'] = UserCreationForm()
-    # args["users"] = User.objects.all()
+
     if request.POST:
         newuser_form = UserCreationForm(request.POST)
         if newuser_form.is_valid():
@@ -64,7 +63,6 @@ def room(request, receiver_id):
     args = {}
     args["tornado_host"] = settings.TORNADO_HOST
     args["tornado_port"] = settings.TORNADO_PORT
-    # args["users"] = User.objects.all()
     args["username"] = auth.get_user(request).username
     sender_id = auth.get_user(request).id
     args["messages"] = sorted(Message.objects.filter(Q(sender=sender_id, receiver=receiver_id) | Q(sender=receiver_id, receiver=sender_id)), key=lambda instance: instance.date)
