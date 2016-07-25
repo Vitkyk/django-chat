@@ -10,20 +10,27 @@ python 2.7.6
 ```shell
 $ pip install -r requirements.txt
 ```
-### Run
+## Database migrate
+
+```
+$ python manage.py migrate
+```
+
+## Run
 
 Run django server:
 
 ```shell
 $ python manage.py runserver
 ```
+
 Run tornado server:
 
 ```
 $ python chat/app.py
 ```
 
-#### Environment variables
+### Environment variables
 
 | Environment variable name |    Description      |                  Default value                    |
 |---------------------------|---------------------|---------------------------------------------------|
